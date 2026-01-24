@@ -1,25 +1,15 @@
 import cv2
 import numpy as np
 
-# -----------------------------
-# 1. Load Pre-trained Model Files
-# -----------------------------
 prototxt = "deploy.prototxt"
 model = "MobileNetSSD_deploy.caffemodel"
 
 net = cv2.dnn.readNetFromCaffe(prototxt, model)
-
-# -----------------------------
-# 2. Classes the model can detect
-# -----------------------------
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant",
            "sheep", "sofa", "train", "tvmonitor"]
 
-# -----------------------------
-# 3. Start Webcam
-# -----------------------------
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -29,19 +19,12 @@ while True:
 
     # Resize frame for faster processing
     (h, w) = frame.shape[:2]
-
-    # -----------------------------------------------
-    # 4. Convert image to blob (model input)
-    # -----------------------------------------------
     blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
                                  0.007843, (300, 300), 127.5)
 
     net.setInput(blob)
     detections = net.forward()
-
-    # -----------------------------------------------
-    # 5. Loop over all detections
-    # -----------------------------------------------
+           
     for i in range(detections.shape[2]):
         confidence = detections[0, 0, i, 2]
 
